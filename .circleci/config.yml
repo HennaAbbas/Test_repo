@@ -1,3 +1,9 @@
+version: 2.1
+
+orbs:
+  cloudwheel-lowell: greenbird/cloudwheel-common@1.0.14
+  cloudwheel: greenbird/cloudwheel@1.0.25
+
 workflows:
   release-build:
     jobs:
@@ -17,3 +23,4 @@ workflows:
                 - master
           requires:
             - cloudwheel-lowell/maven-build-release
+            
