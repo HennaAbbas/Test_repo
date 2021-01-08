@@ -13,14 +13,14 @@ workflows:
           filters:
             branches:
               only:
-                - master
+                - test-orb
       - cloudwheel-lowell/maven-nexus-deploy:
           image: cloudwheel-lowell/linux
           # context: cloudwheel-common
           filters:
             branches:
               only:
-                - master
+                - test-orb
           requires:
             - cloudwheel-lowell/maven-build-release
             
