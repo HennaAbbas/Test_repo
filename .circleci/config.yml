@@ -39,7 +39,7 @@ jobs:
       - run:
           name: Set checkout bit to true
           command: |
-            curl --location --request POST 'https://circleci.com/api/v2/project/(vcs)/(org)/(project)/pipeline' \
+            curl --location --request POST 'https://circleci.com/api/v2/project/github/HennaAbbas/Test_repo/pipeline' \
             --header 'Content-Type: application/json' \
             --data '{"branch":"test-api","parameters":{"run_test":true}}'\
             -u "${CIRCLE_API_USER_TOKEN}:"  
