@@ -17,19 +17,19 @@ jobs:
           condition: << parameters.run_test >>
           steps:
             - run: echo " run my tests"  
-      - run:
-          name: Set checkout bit to true
-          command: |
-              curl -v -H 'Circle-Token: "'"$CIRCLECI_TOKEN"'"' --header "Content-Type: application/json" -d '{
-              "branch": "'"$CIRCLE_BRANCH"'",
-              "parameters": {
-                "run_test": true
-              }}' "https://circleci.com/api/v2/project/github/HennaAbbas/Test_repo/pipeline"
+#       - run:
+#           name: Set checkout bit to true
+#           command: |
+#               curl -v -H 'Circle-Token: "'"$CIRCLECI_TOKEN"'"' --header "Content-Type: application/json" -d '{
+#               "branch": "'"$CIRCLE_BRANCH"'",
+#               "parameters": {
+#                 "run_test": true
+#               }}' "https://circleci.com/api/v2/project/github/HennaAbbas/Test_repo/pipeline"
               
       - run:
           name: Set checkout bit to true
           command: |
-            curl --user ${CIRCLE_API_USER_TOKEN}: \
+            curl --user ${CIRCLE_TOKEN}: \
             --data '{"branch":"test-api","parameters":{"run_test":true}}'
             --data build_parameters[CIRCLE_JOB]=deploy_docker \
             
