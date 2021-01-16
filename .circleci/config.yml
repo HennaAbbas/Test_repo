@@ -1,86 +1,33 @@
-aliases:
-  env: &env
-    environment:
-      SSH_PORT: 18765
-  workflows: &workflows
-    filters:
-      branches:
-        only:
-          - staging
-
-version: 2.1
-
-orbs:
-  node: circleci/node@1.1.6
-
+version: 2.1    
 jobs:
-  build-staging:
-    executor:
-      name: node/default
-    steps:
-      - checkout
-        type: approval
-      - run: git checkout staging
-      - run: yarn
-      - run: yarn build
-      - run:
-          name: Committing Build to Staging
-          command: |
-            git add . && git commit -m "new staging build" && git push
+  build: 
+    parameters:
+      run_test:
+        description: "When to run tests"
+        default: false
+        type: boolean
 
-  install-and-test:
-    executor:
-      name: node/default
+    machine: true
+
     steps:
-      - checkout
-      - node/with-cache:
+      - run: 
+          name: build step
+          command: echo "run build step"  
+      - when:
+          condition: << parameters.run_test >>
           steps:
-            - run: yarn
-            - run: yarn test --watchAll=false
-
-  deploy-live:
-    machine: true
-    steps:
+            - run: echo " run my tests"  
       - run:
-          <<: *env
-          name: "Deploy Over SSH (Live)"
+          name: Set checkout bit to true
           command: |
-            ssh $SSH_USER@$SSH_HOST -p"$SSH_PORT" "cd \"www/$SSH_HOST/public_html\"; git clone \"https://$REPO_ACCESS_TOKEN@github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git\" . || true; git pull"
-  
-  deploy-staging:
-    machine: true
-    steps:
-      - run:
-          <<: *env
-          name: "Deploy Over SSH (Staging)"
-          command: |
-            ssh $SSH_USER@$SSH_HOST -p"$SSH_PORT" "cd \"www/staging.$SSH_HOST/public_html\"; git clone \"https://$REPO_ACCESS_TOKEN@github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git\" . || true; git pull"
-
-
+              curl -v -H 'Circle-Token: "'"$CIRCLECI_TOKEN"'"' --header "Content-Type: application/json" -d '{
+              "branch": "'"$CIRCLE_BRANCH"'",
+              "parameters": {
+                "run_test": true
+              }}' "https://circleci.com/api/v2/project/github/HennaAbbas/test_config/pipeline"            
 workflows:
-  deploy-live:
+  build-app:
     jobs:
-      - deploy-live:
-          filters:
-            branches:
-              only:
-                - master
-
-  deploy-staging:
-    jobs:
-      - install-and-test:
-          <<: *workflows
-      - deploy-staging:
-          <<: *workflows
-          type: approval
-          requires:
-            - install-and-test
-
-  build-staging:
-    jobs:
-      - build-staging:
-          type: approval
-          filters:
-            branches:
-              only:
-                - development
+      - build 
+      - build:
+          run_test: true
