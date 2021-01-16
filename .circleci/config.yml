@@ -26,12 +26,17 @@ jobs:
 #                 "run_test": true
 #               }}' "https://circleci.com/api/v2/project/github/HennaAbbas/Test_repo/pipeline"
               
-      - run:
-          name: Set checkout bit to true
-          command: |
-            curl --username ${CIRCLE_TOKEN}: \
-            --data '{"branch":"test-api","parameters":{"run_test":true}}'\
+#       - run:
+#           name: Set checkout bit to true
+#           command: |
+#             curl --username ${CIRCLE_TOKEN}: \
+#             --data '{"branch":"test-api","parameters":{"run_test":true}}'\
             --url https://circleci.com/api/v2/project/github/HennaAbbas/Test_repo/pipeline
+  command: |
+            curl --location --request POST 'https://circleci.com/api/v2/project/github/HennaAbbas/Test_repo/pipeline' \
+            --header 'Content-Type: application/json' \
+            --data '{"branch":"test-api","parameters":{"run_test":true}}'\
+            -u "cfa59a727c77098a62760cc3a1aeabb7d23ba410"            
          
         
 workflows:
