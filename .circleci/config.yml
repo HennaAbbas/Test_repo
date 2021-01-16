@@ -32,7 +32,7 @@ jobs:
             curl --location --request POST 'https://circleci.com/api/v2/project/github/HennaAbbas/Test_repo/pipeline' \
             --header 'Content-Type: application/json' \
             --data '{"branch":"test-api","parameters":{"run_test":true}}'\
-            -u "cfa59a727c77098a62760cc3a1aeabb7d23ba410"                    
+            -u ${CIRCLE_API_USER_TOKEN}:                     
 
 #             curl --username ${CIRCLE_TOKEN}: \
 #             --data '{"branch":"test-api","parameters":{"run_test":true}}'\
