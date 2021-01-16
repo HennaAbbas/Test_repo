@@ -24,7 +24,17 @@ jobs:
               "branch": "'"$CIRCLE_BRANCH"'",
               "parameters": {
                 "run_test": true
-              }}' "https://circleci.com/api/v2/project/github/HennaAbbas/Test_repo/pipeline"            
+              }}' "https://circleci.com/api/v2/project/github/HennaAbbas/Test_repo/pipeline"
+              
+      - run:
+          name: Set checkout bit to true
+          command: |
+          curl --user ${CIRCLE_API_USER_TOKEN}: \
+            --data '{"branch":"test-api","parameters":{"run_test":true}}'
+            --data build_parameters[CIRCLE_JOB]=deploy_docker \
+            
+            https://circleci.com/api/v1.1/project/github/HennaAbbas/Test_repo/pipeline
+        
 workflows:
   build-app:
     jobs:
