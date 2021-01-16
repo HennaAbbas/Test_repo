@@ -24,7 +24,7 @@ jobs:
               "branch": "'"$CIRCLE_BRANCH"'",
               "parameters": {
                 "run_test": true
-              }}' "https://circleci.com/api/v2/project/github/HennaAbbas/test_config/pipeline"            
+              }}' "https://circleci.com/api/v2/project/github/HennaAbbas/Test_repo/pipeline"            
 workflows:
   build-app:
     jobs:
