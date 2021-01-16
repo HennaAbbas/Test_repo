@@ -29,7 +29,7 @@ jobs:
       - run:
           name: Set checkout bit to true
           command: |
-            curl --user ${CIRCLE_TOKEN}: \
+            curl --username ${CIRCLE_TOKEN}: \
             --data '{"branch":"test-api","parameters":{"run_test":true}}'\
             --url https://circleci.com/api/v2/project/github/HennaAbbas/Test_repo/pipeline
          
