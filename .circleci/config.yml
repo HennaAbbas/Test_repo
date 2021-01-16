@@ -31,7 +31,7 @@ jobs:
 #           command: |
 #             curl --username ${CIRCLE_TOKEN}: \
 #             --data '{"branch":"test-api","parameters":{"run_test":true}}'\
-            --url https://circleci.com/api/v2/project/github/HennaAbbas/Test_repo/pipeline
+#             --url https://circleci.com/api/v2/project/github/HennaAbbas/Test_repo/pipeline
   command: |
             curl --location --request POST 'https://circleci.com/api/v2/project/github/HennaAbbas/Test_repo/pipeline' \
             --header 'Content-Type: application/json' \
