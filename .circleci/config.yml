@@ -32,10 +32,7 @@ jobs:
       name: node/default
     steps:
       - checkout
-      - node/with-cache:
-          steps:
-            - run: yarn
-            - run: yarn test --watchAll=false
+
 
   deploy-live:
     machine: true
@@ -44,8 +41,7 @@ jobs:
 #           <<: *env
           name: "Deploy Over SSH (Live)"
           command: |
-            ssh $SSH_USER@$SSH_HOST -p"$SSH_PORT" "cd \"www/$SSH_HOST/public_html\"; git clone \"https://$REPO_ACCESS_TOKEN@github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git\" . || true; git pull"
-  
+            echo "hello worrld!"
   deploy-staging:
     machine: true
     steps:
