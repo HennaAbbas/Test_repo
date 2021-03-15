@@ -8,56 +8,60 @@
 #         only:
 #           - staging
 
-# version: 2.1
+version: 2.1
 
-# orbs:
-#   node: circleci/node@1.1.6
+orbs:
+  node: circleci/node@1.1.6
 
-# jobs:
-#   build-staging:
-#     executor:
-#       name: node/default
-#     steps:
-#       - checkout
-#         type: approval
-#       - run: git checkout staging
-#       - run: yarn
-#       - run: yarn build
-#       - run:
-#           name: Committing Build to Staging
-#           command: |
-#             git add . && git commit -m "new staging build" && git push
+jobs:
+  build-staging:
+    executor:
+      name: node/default
+    steps:
+      - checkout
+        type: approval
+      - run: git checkout staging
+      - run: yarn
+      - run: yarn build
+      - run:
+          name: Committing Build to Staging
+          command: |
+            git add . && git commit -m "new staging build" && git push
 
-#   install-and-test:
-#     executor:
-#       name: node/default
-#     steps:
-#       - checkout
-#       - node/with-cache:
-#           steps:
-#             - run: yarn
-#             - run: yarn test --watchAll=false
+  install-and-test:
+    executor:
+      name: node/default
+    steps:
+      - checkout
+      - node/with-cache:
+          steps:
+            - run: yarn
+            - run: yarn test --watchAll=false
 
-#   deploy-live:
-#     machine: true
-#     steps:
-#       - run:
+  deploy-live:
+    machine: true
+    steps:
+      - run:
 #           <<: *env
-#           name: "Deploy Over SSH (Live)"
-#           command: |
-#             ssh $SSH_USER@$SSH_HOST -p"$SSH_PORT" "cd \"www/$SSH_HOST/public_html\"; git clone \"https://$REPO_ACCESS_TOKEN@github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git\" . || true; git pull"
+          name: "Deploy Over SSH (Live)"
+          command: |
+            ssh $SSH_USER@$SSH_HOST -p"$SSH_PORT" "cd \"www/$SSH_HOST/public_html\"; git clone \"https://$REPO_ACCESS_TOKEN@github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git\" . || true; git pull"
   
-#   deploy-staging:
-#     machine: true
-#     steps:
-#       - run:
+  deploy-staging:
+    machine: true
+    steps:
+      - run:
 #           <<: *env
-#           name: "Deploy Over SSH (Staging)"
-#           command: |
-#             ssh $SSH_USER@$SSH_HOST -p"$SSH_PORT" "cd \"www/staging.$SSH_HOST/public_html\"; git clone \"https://$REPO_ACCESS_TOKEN@github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git\" . || true; git pull"
+          name: "Deploy Over SSH (Staging)"
+          command: |
+            ssh $SSH_USER@$SSH_HOST -p"$SSH_PORT" "cd \"www/staging.$SSH_HOST/public_html\"; git clone \"https://$REPO_ACCESS_TOKEN@github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git\" . || true; git pull"
+  build:
+    docker:
+      - image: circleci/golang:1.9.6
+    steps:
+      - run: echo "hello world 1"
 
-
-# workflows:
+workflows:
 #   deploy-live:
 #     jobs:
 #       - deploy-live:
@@ -66,43 +70,37 @@
 #               only:
 #                 - master
 
-#   deploy-staging:
-#     jobs:
-#       - install-and-test:
-#           <<: *workflows
-#       - deploy-staging:
-#           <<: *workflows
-#           type: approval
-#           requires:
-#             - install-and-test
-
-#   build-staging:
-#     jobs:
-#       - build-staging:
-#           type: approval
-#           filters:
-#             branches:
-#               only:
-#                 - development
+  deploy-staging:
+    jobs:
+      - install-and-test
+      - deploy-staging:
+          requires:
+            - install-and-test
+      - build-staging:
+          requires:
+            - install-and-test 
+      - deploy-live            
+      
 
 
-version: 2.1
-jobs:
-  build:
-    docker:
-      - image: circleci/golang:1.9.6
-    steps:
-      - run: echo "hello world 1"
 
-      - run: echo "hii"
+# version: 2.1
+# jobs:
+#   build:
+#     docker:
+#       - image: circleci/golang:1.9.6
+#     steps:
+#       - run: echo "hello world 1"
 
-      - run : echo "hiiii"
-      - run : sleep 20 
+#       - run: echo "hii"
+
+#       - run : echo "hiiii"
+#       - run : sleep 20 
  
       
-workflows:
-  version: 2
-  default:
-    jobs:
-      - build
-      #test
+# workflows:
+#   version: 2
+#   default:
+#     jobs:
+#       - build
+#       #test
