@@ -19,13 +19,10 @@ jobs:
       name: node/default
     steps:
       - checkout
-      - run: git checkout staging
-      - run: yarn
-      - run: yarn build
       - run:
           name: Committing Build to Staging
           command: |
-            git add . && git commit -m "new staging build" && git push
+            echo "staging"
 
   install-and-test:
     executor:
@@ -49,7 +46,7 @@ jobs:
 #           <<: *env
           name: "Deploy Over SSH (Staging)"
           command: |
-            ssh $SSH_USER@$SSH_HOST -p"$SSH_PORT" "cd \"www/staging.$SSH_HOST/public_html\"; git clone \"https://$REPO_ACCESS_TOKEN@github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git\" . || true; git pull"
+            echo "hello worlds"
   build:
     docker:
       - image: circleci/golang:1.9.6
