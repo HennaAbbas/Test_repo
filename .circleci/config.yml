@@ -19,7 +19,6 @@ jobs:
       name: node/default
     steps:
       - checkout
-        type: approval
       - run: git checkout staging
       - run: yarn
       - run: yarn build
