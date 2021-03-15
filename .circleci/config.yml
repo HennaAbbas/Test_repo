@@ -1,86 +1,107 @@
-aliases:
-  env: &env
-    environment:
-      SSH_PORT: 18765
-  workflows: &workflows
-    filters:
-      branches:
-        only:
-          - staging
+# aliases:
+#   env: &env
+#     environment:
+#       SSH_PORT: 18765
+#   workflows: &workflows
+#     filters:
+#       branches:
+#         only:
+#           - staging
+
+# version: 2.1
+
+# orbs:
+#   node: circleci/node@1.1.6
+
+# jobs:
+#   build-staging:
+#     executor:
+#       name: node/default
+#     steps:
+#       - checkout
+#         type: approval
+#       - run: git checkout staging
+#       - run: yarn
+#       - run: yarn build
+#       - run:
+#           name: Committing Build to Staging
+#           command: |
+#             git add . && git commit -m "new staging build" && git push
+
+#   install-and-test:
+#     executor:
+#       name: node/default
+#     steps:
+#       - checkout
+#       - node/with-cache:
+#           steps:
+#             - run: yarn
+#             - run: yarn test --watchAll=false
+
+#   deploy-live:
+#     machine: true
+#     steps:
+#       - run:
+#           <<: *env
+#           name: "Deploy Over SSH (Live)"
+#           command: |
+#             ssh $SSH_USER@$SSH_HOST -p"$SSH_PORT" "cd \"www/$SSH_HOST/public_html\"; git clone \"https://$REPO_ACCESS_TOKEN@github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git\" . || true; git pull"
+  
+#   deploy-staging:
+#     machine: true
+#     steps:
+#       - run:
+#           <<: *env
+#           name: "Deploy Over SSH (Staging)"
+#           command: |
+#             ssh $SSH_USER@$SSH_HOST -p"$SSH_PORT" "cd \"www/staging.$SSH_HOST/public_html\"; git clone \"https://$REPO_ACCESS_TOKEN@github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git\" . || true; git pull"
+
+
+# workflows:
+#   deploy-live:
+#     jobs:
+#       - deploy-live:
+#           filters:
+#             branches:
+#               only:
+#                 - master
+
+#   deploy-staging:
+#     jobs:
+#       - install-and-test:
+#           <<: *workflows
+#       - deploy-staging:
+#           <<: *workflows
+#           type: approval
+#           requires:
+#             - install-and-test
+
+#   build-staging:
+#     jobs:
+#       - build-staging:
+#           type: approval
+#           filters:
+#             branches:
+#               only:
+#                 - development
+
 
 version: 2.1
-
-orbs:
-  node: circleci/node@1.1.6
-
 jobs:
-  build-staging:
-    executor:
-      name: node/default
+  build:
+    docker:
+      - image: circleci/golang:1.9.6
     steps:
-      - checkout
-        type: approval
-      - run: git checkout staging
-      - run: yarn
-      - run: yarn build
-      - run:
-          name: Committing Build to Staging
-          command: |
-            git add . && git commit -m "new staging build" && git push
+      - run: echo "hello world 1"
 
-  install-and-test:
-    executor:
-      name: node/default
-    steps:
-      - checkout
-      - node/with-cache:
-          steps:
-            - run: yarn
-            - run: yarn test --watchAll=false
+      - run: echo "hii"
 
-  deploy-live:
-    machine: true
-    steps:
-      - run:
-          <<: *env
-          name: "Deploy Over SSH (Live)"
-          command: |
-            ssh $SSH_USER@$SSH_HOST -p"$SSH_PORT" "cd \"www/$SSH_HOST/public_html\"; git clone \"https://$REPO_ACCESS_TOKEN@github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git\" . || true; git pull"
-  
-  deploy-staging:
-    machine: true
-    steps:
-      - run:
-          <<: *env
-          name: "Deploy Over SSH (Staging)"
-          command: |
-            ssh $SSH_USER@$SSH_HOST -p"$SSH_PORT" "cd \"www/staging.$SSH_HOST/public_html\"; git clone \"https://$REPO_ACCESS_TOKEN@github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git\" . || true; git pull"
-
-
+      - run : echo "hiiii"
+      - run : sleep 20 
+ 
+      
 workflows:
-  deploy-live:
+  version: 2
+  default:
     jobs:
-      - deploy-live:
-          filters:
-            branches:
-              only:
-                - master
-
-  deploy-staging:
-    jobs:
-      - install-and-test:
-          <<: *workflows
-      - deploy-staging:
-          <<: *workflows
-          type: approval
-          requires:
-            - install-and-test
-
-  build-staging:
-    jobs:
-      - build-staging:
-          type: approval
-          filters:
-            branches:
-              only:
-                - development
+      - build
