@@ -71,7 +71,8 @@ workflows:
       - build-staging:
           requires:
             - install-and-test 
-      - deploy-live            
+      - deploy-live:
+          type: approval
       
 
 
