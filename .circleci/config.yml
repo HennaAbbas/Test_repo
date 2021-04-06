@@ -1,13 +1,3 @@
-# aliases:
-#   env: &env
-#     environment:
-#       SSH_PORT: 18765
-#   workflows: &workflows
-#     filters:
-#       branches:
-#         only:
-#           - staging
-
 version: 2.1
 
 orbs:
@@ -35,7 +25,6 @@ jobs:
     machine: true
     steps:
       - run:
-#           <<: *env
           name: "Deploy Over SSH (Live)"
           command: |
             echo "hello worrld!"
@@ -43,7 +32,6 @@ jobs:
     machine: true
     steps:
       - run:
-#           <<: *env
           name: "Deploy Over SSH (Staging)"
           command: |
             echo "hello worlds"
@@ -54,14 +42,6 @@ jobs:
       - run: echo "hello world 1"
 
 workflows:
-#   deploy-live:
-#     jobs:
-#       - deploy-live:
-#           filters:
-#             branches:
-#               only:
-#                 - master
-
   deploy-staging:
     jobs:
       - install-and-test
@@ -72,28 +52,11 @@ workflows:
           requires:
             - install-and-test 
       - deploy-live:
-          type: approval
+          post-steps:
+            - run: echo "hello world" 
+                when: always
       
 
 
 
-# version: 2.1
-# jobs:
-#   build:
-#     docker:
-#       - image: circleci/golang:1.9.6
-#     steps:
-#       - run: echo "hello world 1"
-
-#       - run: echo "hii"
-
-#       - run : echo "hiiii"
-#       - run : sleep 20 
- 
-      
-# workflows:
-#   version: 2
-#   default:
-#     jobs:
-#       - build
 
