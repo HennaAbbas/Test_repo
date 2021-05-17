@@ -51,6 +51,7 @@ workflows:
 #             branches:
 #               only:
 #                 - master
+#test
 
   deploy-staging:
     jobs:
