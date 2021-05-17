@@ -25,6 +25,7 @@ jobs:
     machine: true
     steps:
       - run:
+#           <<: *env
           name: "Deploy Over SSH (Live)"
           command: |
             echo "hello worrld!"
@@ -32,6 +33,7 @@ jobs:
     machine: true
     steps:
       - run:
+#           <<: *env
           name: "Deploy Over SSH (Staging)"
           command: |
             echo "hello worlds"
@@ -42,6 +44,14 @@ jobs:
       - run: echo "hello world 1"
 
 workflows:
+#   deploy-live:
+#     jobs:
+#       - deploy-live:
+#           filters:
+#             branches:
+#               only:
+#                 - master
+
   deploy-staging:
     jobs:
       - install-and-test
@@ -51,11 +61,9 @@ workflows:
       - build-staging:
           requires:
             - install-and-test 
-      - deploy-live:
-          post-steps:
-            - run: echo "hello world" 
-                when: always
+      - deploy-live            
       
+
 
 
 
