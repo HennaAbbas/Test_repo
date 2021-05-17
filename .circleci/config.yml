@@ -9,6 +9,7 @@ jobs:
       name: node/default
     steps:
       - checkout
+      - run: echo 'export MY_ENV_VAR="FOO"' >> $BASH_ENV
       - run:
           name: Committing Build to Staging
           command: |
