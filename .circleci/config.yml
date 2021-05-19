@@ -15,7 +15,11 @@ _run_anchors:
     name: Launch build event collector
     command: |
        echo "hello world"
-    background: true      
+    background: true 
+  test-failed-notification: &test-failed-notification
+    name: Test Failed Notification
+    when: on_fail
+    command: bash ./scripts/test_failed_notification.sh    
 
 orbs:
   node: circleci/node@1.1.6
@@ -50,6 +54,7 @@ jobs:
     steps:
       - run: *run-new-relic-agent   
       - run: *launch-build-event-collector
+      - run: *test-failed-notification
       
   build_regression_db_non_oracle_java_11:
     machine: true
