@@ -11,6 +11,11 @@ _run_anchors:
     name: Run New Relic agent
     command: |
       echo "custom_attributes:"
+  launch-build-event-collector: &launch-build-event-collector
+    name: Launch build event collector
+    command: |
+       echo "hello world"
+    background: true      
 
 orbs:
   node: circleci/node@1.1.6
@@ -44,6 +49,7 @@ jobs:
     working_directory: ~/root
     steps:
       - run: *run-new-relic-agent   
+      - run: *launch-build-event-collector
       
   build_regression_db_non_oracle_java_11:
     machine: true
