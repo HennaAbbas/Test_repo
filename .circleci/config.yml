@@ -32,17 +32,19 @@ jobs:
       name: node/default
     steps:
       - checkout
-
-
+      
   build_regression_db_non_oracle:
-    machine: true
+    parameters:
+      cache_test_results:
+        type: enum
+        default: "no"
+        enum: [ "no", "yes" ]
+    machine:
+      image: ubuntu-1604:202101-01
+    working_directory: ~/root
     steps:
-      - run:
-#           <<: *env
-          name: "Deploy Over SSH (Live)"
-          command: |
-            echo "hello worrld!"
-      - run: *run-new-relic-agent            
+      - run: *run-new-relic-agent   
+      
   build_regression_db_non_oracle_java_11:
     machine: true
     steps:
@@ -97,8 +99,12 @@ workflows:
           requires:
             - install-and-test 
       - build_regression_db_non_oracle:
+          cache_test_results: "yes"
           <<: *ignore_intermediate_branches_and_master          
       - build_regression_db_non_oracle_java_11
+      
+      
+      
   e2e-tests-workflow:
     triggers:
       - schedule:
