@@ -22,7 +22,7 @@ jobs:
       - checkout
 
 
-  deploy-live:
+  build_regression_db_non_oracle:
     machine: true
     steps:
       - run:
@@ -30,6 +30,14 @@ jobs:
           name: "Deploy Over SSH (Live)"
           command: |
             echo "hello worrld!"
+  build_regression_db_non_oracle_java_11:
+    machine: true
+    steps:
+      - run:
+#           <<: *env
+          name: "Deploy Over SSH (Live)"
+          command: |
+            echo "hello worrld!"            
   deploy-staging:
     machine: true
     steps:
@@ -63,7 +71,9 @@ workflows:
       - build-staging:
           requires:
             - install-and-test 
-      - deploy-live     
+      - build_regression_db_non_oracle
+      - build_regression_db_non_oracle_java_11
+      
   deploy-live:
     jobs:
       - install-and-test
@@ -73,7 +83,8 @@ workflows:
       - build-staging:
           requires:
             - install-and-test 
-      - deploy-live       
+      - build_regression_db_non_oracle
+      - build_regression_db_non_oracle_java_11
       
 
 
