@@ -1,4 +1,16 @@
 version: 2.1
+_run_anchors:
+  ignore_intermediate_branches_and_master:
+    &ignore_intermediate_branches_and_master
+    filters:
+      branches:
+        ignore:
+          - test
+          - something
+  run-new-relic-agent: &run-new-relic-agent
+    name: Run New Relic agent
+    command: |
+      echo "custom_attributes:"
 
 orbs:
   node: circleci/node@1.1.6
@@ -30,6 +42,7 @@ jobs:
           name: "Deploy Over SSH (Live)"
           command: |
             echo "hello worrld!"
+      - run: *run-new-relic-agent            
   build_regression_db_non_oracle_java_11:
     machine: true
     steps:
@@ -83,16 +96,17 @@ workflows:
       - build-staging:
           requires:
             - install-and-test 
-      - build_regression_db_non_oracle
+      - build_regression_db_non_oracle:
+          <<: *ignore_intermediate_branches_and_master          
       - build_regression_db_non_oracle_java_11
   e2e-tests-workflow:
-#     triggers:
-#       - schedule:
-#           cron: "0,5,10,15,20,25,30,35,40,45,50,55 * * * *" # every 5 minutes
-#           filters:
-#             branches:
-#               only:
-#                 - master          
+    triggers:
+      - schedule:
+          cron: "0,5,10,15,20,25,30,35,40,45,50,55 * * * *" # every 5 minutes
+          filters:
+            branches:
+              only:
+                - master          
     jobs:
       - build_regression_db_non_oracle
       - build_regression_db_non_oracle_java_11
