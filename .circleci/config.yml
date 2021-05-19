@@ -63,7 +63,17 @@ workflows:
       - build-staging:
           requires:
             - install-and-test 
-      - deploy-live            
+      - deploy-live     
+  deploy-live:
+    jobs:
+      - install-and-test
+      - deploy-staging:
+          requires:
+            - install-and-test
+      - build-staging:
+          requires:
+            - install-and-test 
+      - deploy-live       
       
 
 
