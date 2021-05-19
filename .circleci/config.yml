@@ -62,6 +62,7 @@ jobs:
       - run: *launch-build-event-collector
       - run: *test-failed-notification
       - run: *extract-bazel-test-results
+      - run: ehco << parameters.cache_test_results >>
       
   build_regression_db_non_oracle_java_11:
     machine: true
