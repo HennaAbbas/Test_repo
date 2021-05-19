@@ -22,6 +22,10 @@ _run_anchors:
     name: Test Failed Notification
     when: on_fail
     command: bash ./scripts/test_failed_notification.sh    
+  extract-bazel-test-results: &extract-bazel-test-results
+    name: Extract Bazel Test Results
+    when: always
+    command: echo "hello world"  
 
 orbs:
   node: circleci/node@1.1.6
@@ -57,6 +61,7 @@ jobs:
       - run: *run-new-relic-agent   
       - run: *launch-build-event-collector
       - run: *test-failed-notification
+      - run: *extract-bazel-test-results
       
   build_regression_db_non_oracle_java_11:
     machine: true
