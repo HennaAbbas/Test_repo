@@ -17,7 +17,7 @@ _run_anchors:
        echo "Hi, I'm sleeping for 5 mins..."
        sleep 5m  
        echo "all Done."
-#     background: true 
+    background: true 
   test-failed-notification: &test-failed-notification
     name: Test Failed Notification
     when: on_fail
