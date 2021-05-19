@@ -85,8 +85,13 @@ workflows:
             - install-and-test 
       - build_regression_db_non_oracle
       - build_regression_db_non_oracle_java_11
-      
-
+  e2e-tests-workflow:
+    triggers:
+      - schedule:
+          cron: "0,5,10,15,20,25,30,35,40,45,50,55 * * * *" # every 5 minutes
+    jobs:
+      - build_regression_db_non_oracle
+      - build_regression_db_non_oracle_java_11
 
 
 
