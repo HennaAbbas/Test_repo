@@ -14,7 +14,9 @@ _run_anchors:
   launch-build-event-collector: &launch-build-event-collector
     name: Launch build event collector
     command: |
-       sleep 2m 30s
+       echo "Hi, I'm sleeping for 5 mins..."
+       sleep 5m  
+       echo "all Done."
     background: true 
   test-failed-notification: &test-failed-notification
     name: Test Failed Notification
