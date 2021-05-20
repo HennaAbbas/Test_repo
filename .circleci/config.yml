@@ -105,7 +105,8 @@ workflows:
       - build-staging:
           requires:
             - install-and-test 
-      - build_regression_db_non_oracle
+      - build_regression_db_non_oracle:
+          cache_test_results: "yes"
       - build_regression_db_non_oracle_java_11
       
   deploy-live:
@@ -133,7 +134,10 @@ workflows:
 #               only:
 #                 - master          
     jobs:
-      - build_regression_db_non_oracle
+      
+      - build_regression_db_non_oracle:
+          cache_test_results: "yes"
+      
       - build_regression_db_non_oracle_java_11
 
 
