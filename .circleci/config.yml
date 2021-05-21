@@ -112,6 +112,7 @@ workflows:
       
   deploy-live:
     jobs:
+      - build
       - install-and-test
       - deploy-staging:
           requires:
