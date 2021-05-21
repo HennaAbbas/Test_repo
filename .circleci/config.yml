@@ -96,52 +96,52 @@ workflows:
 #                 - master
 #test
 
-  deploy-staging:
-    jobs:
-      - install-and-test
-      - deploy-staging:
-          requires:
-            - install-and-test
-      - build-staging:
-          requires:
-            - install-and-test 
-      - build_regression_db_non_oracle
+#   deploy-staging:
+#     jobs:
+#       - install-and-test
+#       - deploy-staging:
+#           requires:
+#             - install-and-test
+#       - build-staging:
+#           requires:
+#             - install-and-test 
+#       - build_regression_db_non_oracle
         
           
-      - build_regression_db_non_oracle_java_11
+#       - build_regression_db_non_oracle_java_11
       
   deploy-live:
     jobs:
       - build
-      - install-and-test
-      - deploy-staging:
-          requires:
-            - install-and-test
-      - build-staging:
-          requires:
-            - install-and-test 
-      - build_regression_db_non_oracle:
+#       - install-and-test
+#       - deploy-staging:
+#           requires:
+#             - install-and-test
+#       - build-staging:
+#           requires:
+#             - install-and-test 
+#       - build_regression_db_non_oracle:
            
           
-          <<: *ignore_intermediate_branches_and_master          
-      - build_regression_db_non_oracle_java_11
+#           <<: *ignore_intermediate_branches_and_master          
+#       - build_regression_db_non_oracle_java_11
       
       
       
-  e2e-tests-workflow:
-#     triggers:
-#       - schedule:
-#           cron: "0,5,10,15,20,25,30,35,40,45,50,55 * * * *" # every 5 minutes
-#           filters:
-#             branches:
-#               only:
-#                 - master          
-    jobs:
+#   e2e-tests-workflow:
+# #     triggers:
+# #       - schedule:
+# #           cron: "0,5,10,15,20,25,30,35,40,45,50,55 * * * *" # every 5 minutes
+# #           filters:
+# #             branches:
+# #               only:
+# #                 - master          
+#     jobs:
       
-      - build_regression_db_non_oracle
+#       - build_regression_db_non_oracle
    
       
-      - build_regression_db_non_oracle_java_11
+#       - build_regression_db_non_oracle_java_11
 
 
 #test
