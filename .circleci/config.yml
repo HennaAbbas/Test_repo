@@ -10,9 +10,12 @@ jobs:
       - run : echo "hello world! this is the build job" 
       - run: echo "${CIRCLE_BRANCH}"
       - run:
+          name: "Setup custom environment variables"
+          command: echo 'export MY_BRANCH="${CIRCLE_BRANCH}"' >> $BASH_ENV      
+      - run:
           name: add environment variable
           command: |
-            curl -u "${MY_CIRCLE_TOKEN}": -X POST --header "Content-Type: application/json" -d '{"parameters": {"my_branch_name": "${CIRCLE_BRANCH}", "my_param": "Hello"}}' https://circleci.com/api/v2/project/github/HennaAbbas/test_/pipeline 
+            curl -u "${MY_CIRCLE_TOKEN}": -X POST --header "Content-Type: application/json" -d '{"parameters": {"my_branch_name": "${MY_BRANCH}", "my_param": "Hello"}}' https://circleci.com/api/v2/project/github/HennaAbbas/test_/pipeline 
 
 
   test:
