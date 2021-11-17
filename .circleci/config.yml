@@ -16,7 +16,7 @@ jobs:
       - run:
           name: add environment variable
           command: |
-            curl -u "${MY_CIRCLE_TOKEN}": -X POST --header "Content-Type: application/json" -d '{"parameters": {"my_branch_name": "${MY_BRANCH}", "my_param": "Hello"}}' https://circleci.com/api/v2/project/github/HennaAbbas/test_/pipeline 
+            curl -u "${MY_CIRCLE_TOKEN}": -X POST --header "Content-Type: application/json" -d '{"parameters": {"my_branch_name": ${MY_BRANCH}, "my_param": "Hello"}}' https://circleci.com/api/v2/project/github/HennaAbbas/test_/pipeline 
 
 
   test:
