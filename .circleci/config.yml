@@ -1,63 +1,34 @@
-version: 2.1    
+version: 2.1
+
 jobs:
-  build: 
-    parameters:
-      run_test:
-        description: "When to run tests"
-        default: false
-        type: boolean
-
-    machine: true
-
+  build:
+    docker:
+      - image: cimg/python:3.8.12-browsers
+      
     steps:
-      - run: 
-          name: build step
-          command: echo "run build step"  
-      - when:
-          condition: << parameters.run_test >>
-          steps:
-            - run: echo " run my tests"  
-#       - run:
-#           name: Set checkout bit to true
-#           command: |
-#               curl -v -H 'Circle-Token: "'"$CIRCLECI_TOKEN"'"' --header "Content-Type: application/json" -d '{
-#               "branch": "'"$CIRCLE_BRANCH"'",
-#               "parameters": {
-#                 "run_test": true
-#               }}' "https://circleci.com/api/v2/project/github/HennaAbbas/Test_repo/pipeline"
-#
-              
-#       - run:
-#           name: Set checkout bit to true
-#           command: |
-#             curl --location --request POST 'https://circleci.com/api/v2/project/github/HennaAbbas/Test_repo/pipeline' \
-#             --header 'Content-Type: application/json' \
-#             --data '{"branch":"test-api","parameters":{"run_test":true}}'\
-#             -u ${CIRCLE_API_USER_TOKEN}:                     
 
-
+      - run : echo "hello world! this is the build job" 
       - run:
-          name: Set checkout bit to true
+          name: add environment variable
           command: |
-            curl --location --request POST 'https://circleci.com/api/v2/project/github/HennaAbbas/Test_repo/pipeline' \
-            --header 'Content-Type: application/json' \
-            --data '{"branch":"test-api","parameters":{"run_test":true}}'\
-            -u "${CIRCLE_API_USER_TOKEN}:"  
-            
-            
-#             curl --username ${CIRCLE_TOKEN}: \
-#             --data '{"branch":"test-api","parameters":{"run_test":true}}'\
-#             --url https://circleci.com/api/v2/project/github/HennaAbbas/Test_repo/pipeline
+            curl -u "${CIRCLECI_TOKEN}": -X POST --header "Content-Type: application/json" -d '{"parameters": {"branch_name": "${CIRCLE_BRANCH}"}}' https://circleci.com/api/v2/project/github/HennaAbbas/test_/pipeline 
+          
+          #
 
-#             curl --location --request POST 'https://circleci.com/api/v2/project/github/HennaAbbas/Test_repo/pipeline' \
-#             --header 'Content-Type: application/json' \
-#             --data '{"branch":"test-api","parameters":{"run_test":true}}'\
-#             -u "cfa59a727c77098a62760cc3a1aeabb7d23ba410"            
-         
-        
+
+  test:
+    docker:
+      - image: circleci/python:3.8.12-node-browsers
+      
+    steps:
+      - run : echo "hello world - test job"      
+      
+
+    
+            
+# # #
 workflows:
-  build-app:
-    jobs:
-      - build 
-      - build:
-          run_test: true
+    build_and_push:
+      jobs:
+        - build   
+        - test    
