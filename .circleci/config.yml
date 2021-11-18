@@ -19,9 +19,7 @@ jobs:
           name: add environment variable
           command: |
 #            curl -u "${MY_CIRCLE_TOKEN}": -X POST --header "Content-Type: application/json" -d '{"parameters": {"my_branch_name": "<< pipeline.git.branch >>", "my_param": "Hello"}}' https://circleci.com/api/v2/project/github/HennaAbbas/test_/pipeline 
-            BUILD_INFO=$(curl -X POST -H "Circle-Token: ${CIRCLE_TOKEN}" -H "Content-Type: application/json" -d "{ \"parameters\": { \"my_branch_name\": \"update_circleci\" } }" "https://circleci.com/api/v2/project/github/HennaAbbas/test_/pipeline")
-
-  test:
+            BUILD_INFO=$(curl -X POST -H "Circle-Token: ${MY_CIRCLE_TOKEN}" -H "Content-Type: application/json" -d "{ \"parameters\": { \"my_branch_name\": \"<< pipeline.git.branch >>\" } }" "https://circleci.com/api/v2/project/github/HennaAbbas/test_/pipeline")
     docker:
       - image: circleci/python:3.8.12-node-browsers
       
