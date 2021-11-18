@@ -13,7 +13,7 @@ jobs:
           name: "Setup custom environment variables"
           command: echo 'export MY_BRANCH="${CIRCLE_BRANCH}"' >> $BASH_ENV      
       - run: echo "${MY_BRANCH}"    
-      - run: echo "https://bitbucket.org/ed-app/ed/branches/compare/${CIRCLE_SHA1}%0D${LAST_BRANCH}#commits"
+      - run: echo "https://bitbucket.org/ed-app/ed/branches/compare/${CIRCLE_SHA1}%0D${TEST_VAR}#commits"
       - run:
           name: add environment variable
           command: |
