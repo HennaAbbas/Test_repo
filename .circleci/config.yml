@@ -16,8 +16,9 @@ jobs:
       - run: echo "https://bitbucket.org/ed-app/ed/branches/compare/${CIRCLE_SHA1}%0D${TEST_VAR}#commits"
       - run: echo "https://bitbucket.org/ed-app/ed/branches/compare/${CIRCLE_SHA1}${TEST_VAR}#commits"      
       - run:
-          name: add environment variable
+          name: Trigger Ahua design system app Tests
           command: |
+
 #            curl -u "${MY_CIRCLE_TOKEN}": -X POST --header "Content-Type: application/json" -d '{"parameters": {"my_branch_name": "<< pipeline.git.branch >>", "my_param": "Hello"}}' https://circleci.com/api/v2/project/github/HennaAbbas/test_/pipeline 
             BUILD_INFO=$(curl -X POST -H "Circle-Token: ${MY_CIRCLE_TOKEN}" -H "Content-Type: application/json" -d "{ \"parameters\": { \"my_branch_name\": \"<< pipeline.git.branch >>\" } }" "https://circleci.com/api/v2/project/github/HennaAbbas/test_/pipeline")
     docker:
