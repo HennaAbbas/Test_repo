@@ -1,165 +1,26 @@
+# Use the latest 2.1 version of CircleCI pipeline process engine.
+# See: https://circleci.com/docs/configuration-reference
 version: 2.1
-_run_anchors:
-  ignore_intermediate_branches_and_master:
-    &ignore_intermediate_branches_and_master
-    filters:
-      branches:
-        ignore:
-          - test
-          - something
-  run-new-relic-agent: &run-new-relic-agent
-    name: Run New Relic agent
-    command: |
-      echo "custom_attributes:"
-  launch-build-event-collector: &launch-build-event-collector
-    name: Launch build event collector
-    command: |
-       echo "Hi, I'm sleeping for 5 mins..."
-       sleep 5m  
-       echo "all Done."
-    background: true 
-  test-failed-notification: &test-failed-notification
-    name: Test Failed Notification
-    when: on_fail
-    command: bash ./scripts/test_failed_notification.sh    
-  extract-bazel-test-results: &extract-bazel-test-results
-    name: Extract Bazel Test Results
-    when: always
-    command: echo "hello world"  
 
-orbs:
-  node: circleci/node@1.1.6
-
+# Define a job to be invoked later in a workflow.
+# See: https://circleci.com/docs/configuration-reference/#jobs
 jobs:
-  build-and-test-ios:
-    working_directory: ~/project/flutter/connectivity_tester_app
-    macos:
-      xcode: 14.3.1
-    resource_class: macos.x86.medium.gen2
-
-    steps:
-      # - add_ssh_keys:
-      #     fingerprints:
-      #       - "aa:8b:4f:11:cc:6f:54:e4:17:da:88:c8:3e:80:94:f7"
-
-      - checkout:
-          path: ../..
-
-      - run: git submodule sync
-      - run: git submodule update --init --depth 1
-  build-staging:
-    executor:
-      name: node/default
-    steps:
-      - checkout
-      - run: echo 'export MY_ENV_VAR="FOO"' >> $BASH_ENV
-      - run:
-          name: Committing Build to Staging
-          command: |
-            echo "staging"
-
-  install-and-test:
-    executor:
-      name: node/default
-    steps:
-      - checkout
-      
-  build_regression_db_non_oracle:
-    parameters:
-      cache_test_results:
-        type: enum
-        default: "no"
-        enum: [ "no", "yes" ]
-    machine:
-      image: ubuntu-1604:202101-01
-    working_directory: ~/root
-    steps:
-      - run: *run-new-relic-agent   
-      - run: *launch-build-event-collector
-      - run: *test-failed-notification
-      - run: *extract-bazel-test-results
-      - run: ehco << parameters.cache_test_results >>
-      
-  build_regression_db_non_oracle_java_11:
-    machine: true
-    steps:
-      - run:
-#           <<: *env
-          name: "Deploy Over SSH (Live)"
-          command: |
-            echo "hello worrld!"            
-  deploy-staging:
-    machine: true
-    steps:
-      - run:
-#           <<: *env
-          name: "Deploy Over SSH (Staging)"
-          command: |
-            echo "hello worlds"
-  build:
+  say-hello:
+    # Specify the execution environment. You can specify an image from Docker Hub or use one of our convenience images from CircleCI's Developer Hub.
+    # See: https://circleci.com/docs/configuration-reference/#executor-job
     docker:
-      - image: circleci/golang:1.9.6
+      - image: cimg/base:stable
+    # Add steps to the job
+    # See: https://circleci.com/docs/configuration-reference/#steps
     steps:
-      - run: echo "hello world 1"
+      - checkout
+      - run:
+          name: "Say hello"
+          command: "echo Hello, World!"
 
+# Orchestrate jobs using workflows
+# See: https://circleci.com/docs/configuration-reference/#workflows
 workflows:
-#   deploy-live:
-#     jobs:
-#       - deploy-live:
-#           filters:
-#             branches:
-#               only:
-#                 - master
-#test
-
-#   deploy-staging:
-#     jobs:
-#       - install-and-test
-#       - deploy-staging:
-#           requires:
-#             - install-and-test
-#       - build-staging:
-#           requires:
-#             - install-and-test 
-#       - build_regression_db_non_oracle
-        
-          
-#       - build_regression_db_non_oracle_java_11
-      
-  deploy-live:
+  say-hello-workflow:
     jobs:
-      - build
-      - build-and-test-ios
-#       - install-and-test
-#       - deploy-staging:
-#           requires:
-#             - install-and-test
-#       - build-staging:
-#           requires:
-#             - install-and-test 
-#       - build_regression_db_non_oracle:
-           
-          
-#           <<: *ignore_intermediate_branches_and_master          
-#       - build_regression_db_non_oracle_java_11
-      
-      
-      
-#   e2e-tests-workflow:
-# #     triggers:
-# #       - schedule:
-# #           cron: "0,5,10,15,20,25,30,35,40,45,50,55 * * * *" # every 5 minutes
-# #           filters:
-# #             branches:
-# #               only:
-# #                 - master          
-#     jobs:
-      
-#       - build_regression_db_non_oracle
-   
-      
-#       - build_regression_db_non_oracle_java_11
-
-
-#test
-
+      - say-hello
