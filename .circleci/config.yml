@@ -31,6 +31,22 @@ orbs:
   node: circleci/node@1.1.6
 
 jobs:
+  build-and-test-ios:
+    working_directory: ~/project/flutter/connectivity_tester_app
+    macos:
+      xcode: 14.3.1
+    resource_class: macos.x86.medium.gen2
+
+    steps:
+      # - add_ssh_keys:
+      #     fingerprints:
+      #       - "aa:8b:4f:11:cc:6f:54:e4:17:da:88:c8:3e:80:94:f7"
+
+      - checkout:
+          path: ../..
+
+      - run: git submodule sync
+      - run: git submodule update --init --depth 1
   build-staging:
     executor:
       name: node/default
@@ -113,6 +129,7 @@ workflows:
   deploy-live:
     jobs:
       - build
+      - build-and-test-ios
 #       - install-and-test
 #       - deploy-staging:
 #           requires:
